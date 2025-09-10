@@ -1,0 +1,96 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+  background: #fdf6f0;
+  color: #333;
+}
+
+h1 {
+  color: brown;
+  text-align: center;
+}
+
+.form {
+  border: 2px solid #ccc;
+  padding: 15px;
+  border-radius: 10px;
+  width: 400px;
+  margin: auto;
+  background: #fff;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+select, button {
+  margin-top: 5px;
+  padding: 8px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+button {
+  background: brown;
+  color: white;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+button:hover {
+  background: darkred;
+}
+
+#bill, .bill-container {
+  width: 420px;
+  margin: 20px auto;
+}
+
+.bill-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-card {
+  border: 1px solid #e0d7d0;
+  background: linear-gradient(180deg, #fff 0%, #fffaf7 100%);
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.order-header .title {
+  font-weight: 700;
+  color: brown;
+}
+
+.remove-btn {
+  background: transparent;
+  border: 1px solid #f0cfc5;
+  color: brown;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.remove-btn:hover { background: #ffecec; }
+
+.order-items { list-style: none; padding: 0; margin: 0 0 8px 0; }
+.order-items li { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed #f0e7e3; }
+.order-items li:last-child { border-bottom: none; }
+
+.muted { color: #666; font-size: 0.95em; }
+
+.order-total { display:flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid #faf0ec; }
+.grand-total { text-align: center; padding: 10px; background: #fff7f3; border-radius: 8px; border: 1px solid #f3d9d1; font-weight: 800; color: brown; }
+
+.empty-bill { text-align:center; color:#777; padding: 18px; background:#fff; border-radius:8px; border:1px dashed #eee; }

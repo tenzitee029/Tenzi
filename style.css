@@ -19,7 +19,7 @@ h1 {
   align-items: flex-start;
   margin-top: 60px;
   min-height: 70vh;
-  padding-left: 8vw;
+  padding-left: 12vw;
 }
 
 .menu-panel {
@@ -161,3 +161,4 @@ button:hover {
 .grand-total { text-align: center; padding: 10px; background: #fff7f3; border-radius: 8px; border: 1px solid #f3d9d1; font-weight: 800; color: brown; }
 
 .empty-bill { text-align:center; color:#777; padding: 18px; background:#fff; border-radius:8px; border:1px dashed #eee; }
+

@@ -7,98 +7,80 @@
 </head>
 <body>
   <h1>☕ Kingdom Cafe - Đặt hàng</h1>
-
-  <section class="menu-section" style="max-width:420px;margin:0 auto 24px auto;padding:18px 18px 10px 18px;background:#fffbe9;border-radius:12px;border:1px solid #f3e6c9;box-shadow:0 2px 8px rgba(0,0,0,0.03);">
-    <h2 style="font-size:1.3em;margin-bottom:10px;">📖 MENU NÈ MẤY NÍ</h2>
-    <div style="margin-bottom:10px;"><b>☕ Cà phê</b>
-      <ul style="margin:6px 0 0 0;padding-left:18px;">
-        <li>Cà phê đen đá/nóng: <b>18.000đ</b></li>
-        <li>Cà phê sữa đá/nóng: <b>20.000đ</b></li>
-        <li>Bạc xỉu: <b>22.000đ</b></li>
-        <li>Cold Brew: <b>30.000đ</b></li>
-      </ul>
+    <h1>ORDER CF</h1>
+    <div class="main-layout">
+      <div class="menu-panel">
+        <h2>Menu</h2>
+        <ul>
+          <li><strong>Cà phê</strong>
+            <ul>
+              <li>Cà phê đen đá/nóng (18.000đ)</li>
+              <li>Cà phê sữa đá/nóng (20.000đ)</li>
+              <li>Bạc xỉu (22.000đ)</li>
+              <li>Cold Brew (30.000đ)</li>
+            </ul>
+          </li>
+          <li><strong>Trà & Trà sữa</strong>
+            <ul>
+              <li>Trà đào cam sả (28.000đ)</li>
+              <li>Trà chanh mật ong (22.000đ)</li>
+              <li>Trà tắc xí muội (20.000đ)</li>
+              <li>Trà sữa trân châu (28.000đ)</li>
+              <li>Matcha Latte (32.000đ)</li>
+            </ul>
+          </li>
+          <li><strong>Nước giải khát</strong>
+            <ul>
+              <li>Soda chanh (22.000đ)</li>
+              <li>Soda việt quất (25.000đ)</li>
+              <li>Nước suối (10.000đ)</li>
+              <li>Sting/Pepsi/7Up (15.000đ)</li>
+            </ul>
+          </li>
+          <li><strong>Sinh tố – Nước ép</strong>
+            <ul>
+              <li>Sinh tố bơ (30.000đ)</li>
+              <li>Sinh tố xoài (28.000đ)</li>
+              <li>Sinh tố dâu (28.000đ)</li>
+              <li>Nước ép cam (28.000đ)</li>
+              <li>Nước ép cà rốt (25.000đ)</li>
+            </ul>
+          </li>
+          <li><strong>Ăn vặt</strong>
+            <ul>
+              <li>Khoai tây chiên (25.000đ)</li>
+              <li>Xúc xích chiên (25.000đ)</li>
+              <li>Bánh tráng trộn (20.000đ)</li>
+              <li>Khô gà lá chanh (30.000đ)</li>
+              <li>Mì xào bò (35.000đ)</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="order-panel">
+        <div class="form">
+          <label for="drink">Chọn nước:</label>
+          <select id="drink"></select>
+          <label for="size">Chọn size:</label>
+          <select id="size"></select>
+          <label for="topping">Chọn topping (tối đa 3):</label>
+          <div id="topping"></div>
+          <label for="snack">Chọn ăn vặt:</label>
+          <select id="snack">
+            <option value="">Không chọn</option>
+          </select>
+          <button onclick="confirmOrder()">Xác nhận đơn hàng</button>
+          <button onclick="resetForm()">Đặt thêm đơn hàng</button>
+          <!-- Nút 'Xóa đơn hàng' đã bị loại bỏ -->
+        </div>
+        <div id="bill"></div>
+      </div>
     </div>
-    <div style="margin-bottom:10px;"><b>🍵 Trà &amp; Trà sữa</b>
-      <ul style="margin:6px 0 0 0;padding-left:18px;">
-        <li>Trà đào cam sả: <b>28.000đ</b></li>
-        <li>Trà chanh mật ong: <b>22.000đ</b></li>
-        <li>Trà tắc xí muội: <b>20.000đ</b></li>
-        <li>Trà sữa trân châu: <b>28.000đ</b></li>
-        <li>Matcha Latte: <b>32.000đ</b></li>
-      </ul>
+    <div style="width:100%; display:flex; justify-content:center; margin-top:40px;">
+      <button id="payBtn">Thanh toán</button>
     </div>
-    <div style="margin-bottom:10px;"><b>🧋 Nước giải khát</b>
-      <ul style="margin:6px 0 0 0;padding-left:18px;">
-        <li>Soda chanh: <b>22.000đ</b></li>
-        <li>Soda việt quất: <b>25.000đ</b></li>
-        <li>Nước suối: <b>10.000đ</b></li>
-        <li>Sting/Pepsi/7Up: <b>15.000đ</b></li>
-      </ul>
+      </div>
     </div>
-    <div style="margin-bottom:10px;"><b>🍹 Sinh tố – Nước ép</b>
-      <ul style="margin:6px 0 0 0;padding-left:18px;">
-        <li>Sinh tố bơ: <b>30.000đ</b></li>
-        <li>Sinh tố xoài: <b>28.000đ</b></li>
-        <li>Sinh tố dâu: <b>28.000đ</b></li>
-        <li>Nước ép cam: <b>28.000đ</b></li>
-        <li>Nước ép cà rốt: <b>25.000đ</b></li>
-      </ul>
-    </div>
-    <div style="margin-bottom:10px;"><b>🍟 Ăn vặt – Nhóm học</b>
-      <ul style="margin:6px 0 0 0;padding-left:18px;">
-        <li>Khoai tây chiên: <b>25.000đ</b></li>
-        <li>Xúc xích chiên: <b>25.000đ</b></li>
-        <li>Bánh tráng trộn: <b>20.000đ</b></li>
-        <li>Khô gà lá chanh: <b>30.000đ</b></li>
-        <li>Mì xào bò: <b>35.000đ</b></li>
-      </ul>
-    </div>
-    <div style="margin-bottom:10px;"><b>🔹 Tuỳ chọn thêm:</b>
-      <ul style="margin:6px 0 0 0;padding-left:18px;">
-        <li>Kích thước: <b>Size M (chuẩn)</b> | <b>Size L (+5.000đ)</b></li>
-        <li>Topping (tối đa 3 loại, <b>+5.000đ/loại</b>):<br>
-          <span style="margin-left:12px;">Trân châu đen | Trân châu trắng | Thạch phô mai | Thạch cà phê | Flan | Pudding trứng</span>
-        </li>
-      </ul>
-    </div>
-    <div style="margin-bottom:10px;"><b>🎉 COMBO NHÓM HỌC</b>
-      <ul style="margin:6px 0 0 0;padding-left:18px;">
-        <li>Combo 2 người – <b>69k</b><br><span class="muted">2 nước bất kỳ (≤28k) + 1 ăn vặt (≤25k)</span></li>
-        <li>Combo 3 người – <b>99k</b><br><span class="muted">3 nước bất kỳ (≤28k) + 1 ăn vặt (≤30k)</span></li>
-        <li>Combo 4 người – <b>149k</b><br><span class="muted">4 nước bất kỳ (≤30k) + 2 ăn vặt</span></li>
-        <li>Combo “All Night” – <b>199k</b><br><span class="muted">4 nước (tự chọn size, topping free) + 2 ăn vặt + refill nước suối miễn phí</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <div class="form">
-    <label>Chọn nước:</label>
-    <select id="drink"></select>
-
-    <label>Chọn kích thước:</label>
-    <select id="size"></select>
-
-    <label>Chọn topping (tối đa 3 loại):</label>
-    <div id="topping"></div>
-
-    <label>Chọn món ăn vặt (tùy chọn):</label>
-    <select id="snack">
-      <option value="">Không chọn</option>
-    </select>
-
-    <button onclick="confirmOrder()">Xác nhận đơn hàng</button>
-    <button onclick="resetForm()">Đặt thêm đơn hàng</button>
-    <button onclick="showBill()">Mở hóa đơn</button>
-    <button onclick="deleteOrder()">Xóa đơn hàng</button>
-  </div>
-
- <h2>🧾 Hóa đơn</h2>
-<div id="bill" class="bill-container"></div>
-<div style="text-align:center; margin-top:16px;">
-  <button id="payBtn" style="background:brown;color:white;padding:10px 0;border-radius:7px;font-size:1em;border:none;cursor:pointer;width:100%;max-width:420px;">Thanh toán</button>
-</div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
-

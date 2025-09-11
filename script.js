@@ -1,5 +1,5 @@
 // Thay bằng URL Apps Script của bạn
-const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwc-Q0eHg5ETpK46nTOWb854rGL0AeNOqDzmwbBmIqE9B8X2f91qSnws4PGTkAPhdB6/exec";
+const GOOGLE_SHEET_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxhgIXIGGb-st6PuEou2dGcQhsDZzaj2d0eUW4Yrtz6DDpZ_YFXe46zEsWxYyWTEkU/exec";
 
 function sendOrderToGoogleSheet(order) {
   fetch(GOOGLE_SHEET_WEBHOOK_URL, {
@@ -270,3 +270,4 @@ function deleteOrder() {
     alert("Số không hợp lệ!");
   }
 }
+

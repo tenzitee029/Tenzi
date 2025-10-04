@@ -62,6 +62,20 @@ const priceTable = {
 // Giỏ hàng lưu nhiều đơn
 let orders = [];
 
+// Helper function to show/hide modals with animations
+function toggleModal(modalId, show) {
+  const modal = document.getElementById(modalId);
+  if (show) {
+    modal.classList.add('active');
+  } else {
+    modal.classList.remove('active');
+    // For QR section, explicitly hide it after closing modal
+    if (modalId === "paymentModal") {
+      document.getElementById("qrSection").style.display = "none";
+    }
+  }
+}
+
 // Khởi tạo select + checkbox
 window.onload = () => {
   // Khởi tạo select nước (có nhóm)
@@ -85,13 +99,14 @@ window.onload = () => {
   // Khởi tạo topping
   let toppingDiv = document.getElementById("topping");
   toppingOptions.forEach(t => {
+    let label = document.createElement("label");
     let cb = document.createElement("input");
     cb.type = "checkbox";
     cb.value = t;
     cb.name = "topping";
-    toppingDiv.appendChild(cb);
-    toppingDiv.appendChild(document.createTextNode(" " + t));
-    toppingDiv.appendChild(document.createElement("br"));
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(" " + t));
+    toppingDiv.appendChild(label);
   });
 
   // Khởi tạo select ăn vặt
@@ -111,13 +126,182 @@ window.onload = () => {
         alert("Chưa có đơn hàng nào để thanh toán!");
         return;
       }
-      let totalAll = orders.reduce((sum, order) => sum + calculateTotal(order), 0);
-      alert(`Cảm ơn bạn đã thanh toán!\nTổng hóa đơn: ${totalAll.toLocaleString()} VND`);
-      orders = [];
-      renderBill();
+      // Hiển thị modal chọn phương thức thanh toán
+      toggleModal("paymentModal", true);
     };
   }
+
+  // Xử lý nút trong modal
+  document.getElementById("cashBtn").onclick = () => handlePayment("Tiền mặt");
+  document.getElementById("bankBtn").onclick = () => {
+    // Hiện QR
+    document.getElementById("qrSection").style.display = "block";
+  };
+  document.getElementById("confirmBankBtn").onclick = () => handlePayment("Chuyển khoản");
+  document.getElementById("closeModalBtn").onclick = () => {
+    toggleModal("paymentModal", false);
+  };
+
+  // Đóng modal cảm ơn
+  document.getElementById("closeThankBtn").onclick = () => {
+    toggleModal("thankModal", false);
+    // Xóa thông tin tổng tiền vừa thêm
+    let modalContent = document.querySelector("#thankModal .modal-content");
+    let extra = modalContent.querySelector(".modal-total-info"); // Use a specific class
+    if (extra) extra.remove();
+  };
+
+  // Thay prompt bằng modal nhập mật khẩu
+  document.getElementById("historyBtn").onclick = () => {
+    document.getElementById("managerPassword").value = "";
+    document.getElementById("passwordError").style.display = "none";
+    toggleModal("passwordModal", true);
+    document.getElementById("managerPassword").focus();
+  };
+
+  // Event listener for password submission (for history)
+  document.getElementById("submitPasswordBtn").onclick = function() {
+    const pass = document.getElementById("managerPassword").value;
+    if (pass !== "002299") { // Manager password
+      document.getElementById("passwordError").style.display = "block";
+      return;
+    }
+    toggleModal("passwordModal", false);
+    showHistory();
+    toggleModal("historyModal", true);
+    // Re-attach delete history functionality correctly after password check
+    document.getElementById("deleteHistoryBtn").onclick = handleDeleteHistoryAttempt;
+  };
+
+  document.getElementById("closePasswordBtn").onclick = () => {
+    toggleModal("passwordModal", false);
+  };
+
+  // Khởi tạo lại modal lịch sử
+  document.getElementById("closeHistoryBtn").onclick = () => {
+    toggleModal("historyModal", false);
+  };
+
+  // Initial setup for delete history button
+  document.getElementById("deleteHistoryBtn").onclick = handleDeleteHistoryAttempt;
+
+  renderHotItems();
+  renderBill(); // Render empty bill on load if no orders
 };
+
+// Function to handle delete history button click (opens password modal)
+function handleDeleteHistoryAttempt() {
+  // Show password modal
+  document.getElementById("managerPassword").value = "";
+  document.getElementById("passwordError").style.display = "none";
+  toggleModal("passwordModal", true);
+  document.getElementById("managerPassword").focus();
+
+  // Temporarily change submitPasswordBtn's behavior for history deletion
+  document.getElementById("submitPasswordBtn").onclick = function() {
+    const pass = document.getElementById("managerPassword").value;
+    if (pass !== "002299") { // Manager password
+      document.getElementById("passwordError").style.display = "block";
+      return;
+    }
+    // Correct password, proceed with deletion
+    localStorage.removeItem("orderHistory");
+    localStorage.removeItem("drinkStats"); // Also clear drink stats
+    showHistory(); // Refresh history display (will be empty)
+    renderHotItems(); // Refresh hot items (will be based on empty stats)
+    toggleModal("passwordModal", false); // Close password modal
+    // No need to close history modal, it should still be open
+    // Re-attach the default submit password behavior (for future history viewing)
+    document.getElementById("submitPasswordBtn").onclick = () => {
+      const currentPass = document.getElementById("managerPassword").value;
+      if (currentPass !== "002299") {
+        document.getElementById("passwordError").style.display = "block";
+        return;
+      }
+      toggleModal("passwordModal", false);
+      showHistory();
+      toggleModal("historyModal", true);
+    };
+  };
+}
+
+
+// Lưu lịch sử vào localStorage
+function saveHistory(orderArr) {
+  let history = JSON.parse(localStorage.getItem("orderHistory") || "[]");
+  history = history.concat(orderArr);
+  localStorage.setItem("orderHistory", JSON.stringify(history));
+}
+
+// Hiển thị lịch sử đơn hàng
+function showHistory() {
+  let history = JSON.parse(localStorage.getItem("orderHistory") || "[]");
+  const historyList = document.getElementById("historyList");
+  historyList.innerHTML = "";
+  if (!history.length) {
+    historyList.innerHTML = '<div class="empty-bill">Chưa có lịch sử đơn hàng.</div>';
+    return;
+  }
+  history.forEach((order, idx) => {
+    let total = calculateTotal(order);
+    const card = document.createElement('div');
+    card.className = 'order-card'; // Keep order-card class for styling
+    card.innerHTML = `
+      <div class="order-header">
+        <div class="title">Đơn hàng ${idx+1}</div>
+        <div class="muted">${order.time || ""}</div>
+      </div>
+      <ul class="order-items">
+        <li><span>Nước</span><span>${order.drink}</span></li>
+        <li><span>Kích thước</span><span>${order.size}</span></li>
+        <li><span>Topping</span><span>${order.topping && order.topping.length ? order.topping.join(', ') : '<span class="muted">Không chọn</span>'}</span></li>
+        <li><span>Ăn vặt</span><span>${order.snack ? order.snack : '<span class="muted">Không chọn</span>'}</span></li>
+      </ul>
+      <div class="order-total">
+        <div class="muted">Tổng đơn</div><div><strong>${total.toLocaleString()} VND</strong></div>
+      </div>
+    `;
+    historyList.appendChild(card);
+  });
+}
+
+// Cập nhật thống kê số lượng nước bán được
+function updateDrinkStats(ordersArr) {
+  let stats = JSON.parse(localStorage.getItem("drinkStats") || "{}");
+  ordersArr.forEach(order => {
+    if (order.drink) {
+      stats[order.drink] = (stats[order.drink] || 0) + 1;
+    }
+  });
+  localStorage.setItem("drinkStats", JSON.stringify(stats));
+}
+
+function getDrinkStats() {
+  return JSON.parse(localStorage.getItem("drinkStats") || "{}");
+}
+
+// Sửa hàm handlePayment để cập nhật số lượng nước bán được
+function handlePayment(methodText) {
+  let totalAll = orders.reduce((sum, order) => sum + calculateTotal(order), 0);
+  toggleModal("paymentModal", false); // Close payment modal
+  saveHistory(orders); // Lưu lịch sử
+  updateDrinkStats(orders); // Cập nhật thống kê nước bán được
+  renderHotItems(); // Re-render hot items after stats update
+  orders = [];
+  renderBill(); // Clear current bill
+
+  // Hiện modal cảm ơn
+  const thankModal = document.getElementById("thankModal");
+  // Remove any previous total info before adding new one
+  let prevTotalInfo = thankModal.querySelector(".modal-total-info");
+  if (prevTotalInfo) prevTotalInfo.remove();
+
+  thankModal.querySelector(".modal-content").insertAdjacentHTML(
+    "beforeend",
+    `<div class="modal-total-info" style="margin-top:20px; color:#4CAF50; font-weight:600; font-size:1.1em;">Tổng hóa đơn: ${totalAll.toLocaleString()} VND<br>Phương thức: ${methodText}</div>`
+  );
+  toggleModal("thankModal", true); // Show thank you modal
+}
 
 function calculateTotal(order) {
   let total = 0;
@@ -157,6 +341,7 @@ function confirmOrder() {
   orders.push(order);
   sendOrderToGoogleSheet(order);
   renderBill();
+  resetForm(); // Reset form after confirming an order
 }
 
 function renderBill() {
@@ -173,56 +358,22 @@ function renderBill() {
     totalAll += total;
 
     const card = document.createElement('div');
-    card.className = 'order-card';
-
-    const header = document.createElement('div');
-    header.className = 'order-header';
-    const title = document.createElement('div');
-    title.className = 'title';
-    title.textContent = `Đơn hàng ${idx+1}`;
-    const remove = document.createElement('button');
-    remove.className = 'remove-btn';
-    remove.textContent = 'Xóa';
-    remove.onclick = () => { deleteOrderAt(idx); };
-    header.appendChild(title);
-    header.appendChild(remove);
-
-    const items = document.createElement('ul');
-    items.className = 'order-items';
-
-    // Nước
-    const drinkLi = document.createElement('li');
-    drinkLi.innerHTML = `<span>Nước</span><span>${order.drink}</span>`;
-    items.appendChild(drinkLi);
-
-    // Size
-    const sizeLi = document.createElement('li');
-    sizeLi.innerHTML = `<span>Kích thước</span><span>${order.size}</span>`;
-    items.appendChild(sizeLi);
-
-    // Topping
-    const toppingLi = document.createElement('li');
-    if (order.topping.length) {
-      const toppings = order.topping.map(t => `${t}`).join(', ');
-      toppingLi.innerHTML = `<span>Topping</span><span>${toppings}</span>`;
-    } else {
-      toppingLi.innerHTML = `<span>Topping</span><span class="muted">Không chọn</span>`;
-    }
-    items.appendChild(toppingLi);
-
-    // Ăn vặt
-    const snackLi = document.createElement('li');
-    snackLi.innerHTML = `<span>Ăn vặt</span><span>${order.snack ? order.snack : '<span class="muted">Không chọn</span>'}</span>`;
-    items.appendChild(snackLi);
-
-    const totalRow = document.createElement('div');
-    totalRow.className = 'order-total';
-    totalRow.innerHTML = `<div class="muted">Tổng đơn</div><div><strong>${total.toLocaleString()} VND</strong></div>`;
-
-    card.appendChild(header);
-    card.appendChild(items);
-    card.appendChild(totalRow);
-
+    card.className = 'order-card'; // This class has the animation
+    card.innerHTML = `
+      <div class="order-header">
+        <div class="title">Đơn hàng ${idx+1}</div>
+        <button class="remove-btn" onclick="deleteOrderAt(${idx})">Xóa</button>
+      </div>
+      <ul class="order-items">
+        <li><span>Nước</span><span>${order.drink}</span></li>
+        <li><span>Kích thước</span><span>${order.size}</span></li>
+        <li><span>Topping</span><span>${order.topping && order.topping.length ? order.topping.join(', ') : '<span class="muted">Không chọn</span>'}</span></li>
+        <li><span>Ăn vặt</span><span>${order.snack ? order.snack : '<span class="muted">Không chọn</span>'}</span></li>
+      </ul>
+      <div class="order-total">
+        <div class="muted">Tổng đơn</div><div><strong>${total.toLocaleString()} VND</strong></div>
+      </div>
+    `;
     container.appendChild(card);
   });
 
@@ -236,7 +387,6 @@ function deleteOrderAt(idx) {
   if (idx >=0 && idx < orders.length) {
     orders.splice(idx, 1);
     renderBill();
-    // keep user informed if no orders left
   }
 }
 
@@ -255,20 +405,39 @@ function showBill() {
   }
 }
 
-function deleteOrder() {
-  if (!orders.length) {
-    alert("Không có đơn hàng để xóa!");
+// Hàm render danh sách nước bán chạy
+function renderHotItems() {
+  const stats = getDrinkStats();
+  const hotList = document.getElementById("hotItemsList");
+  hotList.innerHTML = "";
+  
+  let allDrinks = [];
+  drinkOptions.forEach(group => {
+    group.items.forEach(item => {
+      allDrinks.push(item.name);
+    });
+  });
+
+  // Sort and filter for items that have been sold at least once
+  const sortedHotDrinks = allDrinks
+    .filter(drink => (stats[drink] || 0) > 0) // Only show items that have been sold
+    .sort((a, b) => (stats[b] || 0) - (stats[a] || 0));
+
+  // If no items have been sold, display a message
+  if (sortedHotDrinks.length === 0) {
+    hotList.innerHTML = '<li><span class="muted" style="margin-left: 0;">Chưa có nước nào được bán.</span></li>';
     return;
   }
-  let idx = prompt(`Nhập số đơn hàng muốn xóa (1 - ${orders.length}):`);
-  idx = parseInt(idx) - 1;
-  if (idx >= 0 && idx < orders.length) {
-    orders.splice(idx, 1);
-    renderBill();
-    alert("Đã xóa đơn hàng!");
-  } else {
-    alert("Số không hợp lệ!");
-  }
+
+  // Only take top 5 or 6 (you had 6 in your initial HTML, let's stick to 6 for consistency)
+  sortedHotDrinks.slice(0, 6).forEach((drink, idx) => {
+    const count = stats[drink] || 0;
+    hotList.innerHTML += `
+      <li>
+        <span class="hot-rank${idx==0?' top1':(idx==1?' top2':(idx==2?' top3':''))}">${idx+1}</span>
+        <span>${drink}</span>
+        <span class="hot-count">${count}</span>
+      </li>
+    `;
+  });
 }
-
-

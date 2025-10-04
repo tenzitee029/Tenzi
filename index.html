@@ -4,84 +4,168 @@
   <meta charset="UTF-8">
   <title>Kingdom Cafe - Đặt hàng</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-  <h1>☕ Kingdom Cafe </h1>
-    <h1>ĐẶT HÀNG TẠI ĐÂY</h1>
-    <div class="main-layout">
-      <div class="menu-panel">
-        <h2>Menu</h2>
-        <ul>
-          <li><strong>Cà phê</strong>
-            <ul>
-              <li>Cà phê đen đá/nóng (18.000đ)</li>
-              <li>Cà phê sữa đá/nóng (20.000đ)</li>
-              <li>Bạc xỉu (22.000đ)</li>
-              <li>Cold Brew (30.000đ)</li>
-            </ul>
-          </li>
-          <li><strong>Trà & Trà sữa</strong>
-            <ul>
-              <li>Trà đào cam sả (28.000đ)</li>
-              <li>Trà chanh mật ong (22.000đ)</li>
-              <li>Trà tắc xí muội (20.000đ)</li>
-              <li>Trà sữa trân châu (28.000đ)</li>
-              <li>Matcha Latte (32.000đ)</li>
-            </ul>
-          </li>
-          <li><strong>Nước giải khát</strong>
-            <ul>
-              <li>Soda chanh (22.000đ)</li>
-              <li>Soda việt quất (25.000đ)</li>
-              <li>Nước suối (10.000đ)</li>
-              <li>Sting/Pepsi/7Up (15.000đ)</li>
-            </ul>
-          </li>
-          <li><strong>Sinh tố – Nước ép</strong>
-            <ul>
-              <li>Sinh tố bơ (30.000đ)</li>
-              <li>Sinh tố xoài (28.000đ)</li>
-              <li>Sinh tố dâu (28.000đ)</li>
-              <li>Nước ép cam (28.000đ)</li>
-              <li>Nước ép cà rốt (25.000đ)</li>
-            </ul>
-          </li>
-          <li><strong>Ăn vặt</strong>
-            <ul>
-              <li>Khoai tây chiên (25.000đ)</li>
-              <li>Xúc xích chiên (25.000đ)</li>
-              <li>Bánh tráng trộn (20.000đ)</li>
-              <li>Khô gà lá chanh (30.000đ)</li>
-              <li>Mì xào bò (35.000đ)</li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="order-panel">
-        <div class="form">
-          <label for="drink">Chọn nước:</label>
-          <select id="drink"></select>
-          <label for="size">Chọn size:</label>
-          <select id="size"></select>
-          <label for="topping">Chọn topping (tối đa 3):</label>
-          <div id="topping"></div>
-          <label for="snack">Chọn ăn vặt:</label>
-          <select id="snack">
+  <header class="site-header">
+    <div class="logo">
+      <i class="fas fa-mug-hot"></i>
+      <h1>Kingdom Cafe</h1>
+    </div>
+    <h2>ĐẶT HÀNG TẠI ĐÂY</h2>
+  </header>
+
+  <main class="main-layout">
+    <div class="menu-panel panel">
+      <h2><i class="fas fa-coffee menu-icon"></i> Menu</h2>
+      <ul class="menu-category-list">
+        <li><strong>Cà phê</strong>
+          <ul>
+            <li>Cà phê đen đá/nóng <span class="price">18.000đ</span></li>
+            <li>Cà phê sữa đá/nóng <span class="price">20.000đ</span></li>
+            <li>Bạc xỉu <span class="price">22.000đ</span></li>
+            <li>Cold Brew <span class="price">30.000đ</span></li>
+          </ul>
+        </li>
+        <li><strong>Trà & Trà sữa</strong>
+          <ul>
+            <li>Trà đào cam sả <span class="price">28.000đ</span></li>
+            <li>Trà chanh mật ong <span class="price">22.000đ</span></li>
+            <li>Trà tắc xí muội <span class="price">20.000đ</span></li>
+            <li>Trà sữa trân châu <span class="price">28.000đ</span></li>
+            <li>Matcha Latte <span class="price">32.000đ</span></li>
+          </ul>
+        </li>
+        <li><strong>Nước giải khát</strong>
+          <ul>
+            <li>Soda chanh <span class="price">22.000đ</span></li>
+            <li>Soda việt quất <span class="price">25.000đ</span></li>
+            <li>Nước suối <span class="price">10.000đ</span></li>
+            <li>Sting/Pepsi/7Up <span class="price">15.000đ</span></li>
+          </ul>
+        </li>
+        <li><strong>Sinh tố – Nước ép</strong>
+          <ul>
+            <li>Sinh tố bơ <span class="price">30.000đ</span></li>
+            <li>Sinh tố xoài <span class="price">28.000đ</span></li>
+            <li>Sinh tố dâu <span class="price">28.000đ</span></li>
+            <li>Nước ép cam <span class="price">28.000đ</span></li>
+            <li>Nước ép cà rốt <span class="price">25.000đ</span></li>
+          </ul>
+        </li>
+        <li><strong>Ăn vặt</strong>
+          <ul>
+            <li>Khoai tây chiên <span class="price">25.000đ</span></li>
+            <li>Xúc xích chiên <span class="price">25.000đ</span></li>
+            <li>Bánh tráng trộn <span class="price">20.000đ</span></li>
+            <li>Khô gà lá chanh <span class="price">30.000đ</span></li>
+            <li>Mì xào bò <span class="price">35.000đ</span></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="order-panel panel">
+      <div class="form-section">
+        <h3><i class="fas fa-list-alt form-icon"></i> Tạo Đơn Hàng</h3>
+        <div class="form-group">
+          <label for="drink"><i class="fas fa-glass-whiskey"></i> Chọn nước:</label>
+          <select id="drink" class="custom-select"></select>
+        </div>
+        <div class="form-group">
+          <label for="size"><i class="fas fa-ruler-combined"></i> Chọn size:</label>
+          <select id="size" class="custom-select"></select>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-plus-circle"></i> Chọn topping (tối đa 3):</label>
+          <div id="topping" class="topping-checkbox-group"></div>
+        </div>
+        <div class="form-group">
+          <label for="snack"><i class="fas fa-cookie-bite"></i> Chọn ăn vặt:</label>
+          <select id="snack" class="custom-select">
             <option value="">Không chọn</option>
           </select>
-          <button onclick="confirmOrder()">Xác nhận đơn hàng</button>
-          <button onclick="resetForm()">Đặt thêm đơn hàng</button>
-          <!-- Nút 'Xóa đơn hàng' đã bị loại bỏ -->
         </div>
-        <div id="bill"></div>
+        <div class="form-actions">
+          <button onclick="confirmOrder()" class="btn btn-primary"><i class="fas fa-check-circle"></i> Xác nhận đơn hàng</button>
+          <button onclick="resetForm()" class="btn btn-secondary"><i class="fas fa-plus"></i> Đặt thêm đơn hàng</button>
+        </div>
+      </div>
+      <div id="bill" class="bill-section"></div>
+    </div>
+
+    <div class="hot-items-panel panel">
+      <h2><i class="fas fa-fire hot-icon"></i> Nước bán chạy</h2>
+      <ul id="hotItemsList" class="hot-items-list">
+        <li><span class="hot-rank top1">1</span> Trà đào cam sả <span class="hot-count"></span></li>
+        <li><span class="hot-rank top2">2</span> Cà phê sữa đá/nóng <span class="hot-count"></span></li>
+        <li><span class="hot-rank top3">3</span> Trà sữa trân châu <span class="hot-count"></span></li>
+        <li><span class="hot-rank">4</span> Matcha Latte <span class="hot-count"></span></li>
+        <li><span class="hot-rank">5</span> Cold Brew <span class="hot-count"></span></li>
+      </ul>
+    </div>
+  </main>
+
+  <div class="footer-actions">
+    <button id="payBtn" class="btn btn-pay"><i class="fas fa-credit-card"></i> Thanh toán</button>
+    <button id="historyBtn" class="btn btn-history"><i class="fas fa-history"></i> Lịch sử</button>
+  </div>
+
+  <!-- Payment Modal -->
+  <div id="paymentModal" class="modal">
+    <div class="modal-content">
+      <h3>Chọn hình thức thanh toán</h3>
+      <div class="payment-options">
+        <button id="cashBtn" class="btn pay-method-btn"><i class="fas fa-money-bill-wave"></i> Tiền mặt</button>
+        <button id="bankBtn" class="btn pay-method-btn"><i class="fas fa-money-check-alt"></i> Chuyển khoản</button>
+      </div>
+      <div id="qrSection" class="qr-section">
+        <div><strong>Quét mã QR để chuyển khoản:</strong></div>
+        <img src="qr.png" alt="QR chuyển khoản" class="qr-image">
+        <button id="confirmBankBtn" class="btn btn-success"><i class="fas fa-check-double"></i> Đã chuyển khoản</button>
+      </div>
+      <button id="closeModalBtn" class="btn btn-close-modal">Đóng</button>
+    </div>
+  </div>
+
+  <!-- Thank You Modal -->
+  <div id="thankModal" class="modal">
+    <div class="modal-content thank-modal-content">
+      <h2 class="thank-you-title"><i class="fas fa-party-popper"></i> Cảm ơn bạn!</h2>
+      <div class="thank-you-message">
+        Đơn hàng của bạn đã được ghi nhận.<br>
+        Chúc bạn có trải nghiệm tuyệt vời tại <strong>Kingdom Cafe</strong>!
+      </div>
+      <button id="closeThankBtn" class="btn btn-success"><i class="fas fa-times-circle"></i> Đóng</button>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div id="historyModal" class="modal">
+    <div class="modal-content history-modal-content">
+      <h2 class="modal-title"><i class="fas fa-history"></i> Lịch sử đơn hàng</h2>
+      <div id="historyList" class="history-list"></div>
+      <div class="history-actions">
+        <button id="deleteHistoryBtn" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Xóa lịch sử</button>
+        <button id="closeHistoryBtn" class="btn btn-secondary"><i class="fas fa-times"></i> Đóng</button>
       </div>
     </div>
-    <div style="width:100%; display:flex; justify-content:center; margin-top:40px;">
-      <button id="payBtn">Thanh toán</button>
-    </div>
+  </div>
+
+  <!-- Password Modal -->
+  <div id="passwordModal" class="modal">
+    <div class="modal-content password-modal-content">
+      <h3 class="modal-title"><i class="fas fa-lock"></i> Nhập mật khẩu quản lý</h3>
+      <input type="password" id="managerPassword" placeholder="Mật khẩu..." class="password-input">
+      <div id="passwordError" class="error-message">Sai mật khẩu!</div>
+      <div class="password-actions">
+        <button id="submitPasswordBtn" class="btn btn-success"><i class="fas fa-check"></i> Xác nhận</button>
+        <button id="closePasswordBtn" class="btn btn-secondary"><i class="fas fa-times"></i> Đóng</button>
       </div>
     </div>
-    <script src="script.js"></script>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
-
